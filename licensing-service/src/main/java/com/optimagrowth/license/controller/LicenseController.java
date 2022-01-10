@@ -1,5 +1,6 @@
 package com.optimagrowth.license.controller;
 
+import com.optimagrowth.license.model.ClientType;
 import com.optimagrowth.license.model.License;
 import com.optimagrowth.license.service.LicenseService;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +19,14 @@ public class LicenseController {
 
     private final LicenseService licenseService;
 
-    @GetMapping(value="/{licenseId}")
+
+    @GetMapping(value="/{licenseId}/{clientType}")
     public ResponseEntity<License> getLicense(@PathVariable("organizationId") String organizationId,
-                                              @PathVariable("licenseId") String licenseId) {
-        License license = licenseService.getLicense(licenseId, organizationId);
+                                              @PathVariable("licenseId") String licenseId, @PathVariable("clientType") ClientType clientType) {
+        License license = licenseService.getLicense(licenseId, organizationId, clientType);
         license.add(
                 linkTo(methodOn(LicenseController.class).getLicense(organizationId,
-                        license.getLicenseId())).withSelfRel(),
+                        license.getLicenseId(), clientType)).withSelfRel(),
                 linkTo(methodOn(LicenseController.class).createLicense(license, null)).withRel("createLicense"),
                 linkTo(methodOn(LicenseController.class).updateLicense(license)).withRel("updateLicense"),
                 linkTo(methodOn(LicenseController.class).deleteLicense(organizationId, null,
