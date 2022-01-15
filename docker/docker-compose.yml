@@ -1,4 +1,4 @@
-version: '3.7'
+version: '2.1'
 
 services:
 
@@ -35,8 +35,10 @@ services:
     environment:
       SPRING_CLOUD_CONFIG_URI: http://configserver:8071
     depends_on:
-      - database
-      - configserver
+      database:
+        condition: service_healthy
+      configserver:
+        condition: service_started
     networks:
       backend:
         aliases:
@@ -49,10 +51,10 @@ services:
       SPRING_PROFILES_ACTIVE: "dev"
       SPRING_CLOUD_CONFIG_URI: http://configserver:8071
     depends_on:
-      - database
-#        condition: service_healthy
-      - configserver
-#        condition: service_started
+      database:
+        condition: service_healthy
+      configserver:
+        condition: service_started
     networks:
       - backend
   organizationservice:
@@ -63,10 +65,10 @@ services:
       SPRING_PROFILES_ACTIVE: "dev"
       SPRING_CLOUD_CONFIG_URI: http://configserver:8071
     depends_on:
-      - database
-      #        condition: service_healthy
-      - configserver
-    #        condition: service_started
+      database:
+        condition: service_healthy
+      configserver:
+        condition: service_started
     networks:
       - backend
 
