@@ -3,18 +3,22 @@ package com.optimagrowth.license.controller;
 import com.optimagrowth.license.model.ClientType;
 import com.optimagrowth.license.model.License;
 import com.optimagrowth.license.service.LicenseService;
+import com.optimagrowth.license.utils.UserContextHolder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Locale;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value="v1/organization/{organizationId}/license")
+@RequestMapping(value="/v1/organization/{organizationId}/license")
 public class LicenseController {
 
     private final LicenseService licenseService;
@@ -50,5 +54,12 @@ public class LicenseController {
                                                 @RequestHeader(value = "Accept-Language", required = false) Locale locale,
                                                 @PathVariable("licenseId") String licenseId) {
         return ResponseEntity.ok(licenseService.deleteLicense(licenseId, locale));
+    }
+
+    @GetMapping()
+    public List<License> getLicenses(@PathVariable("organizationId") String organizationId) {
+        log.info("LicenseServiceController Correlation id: {}",
+                UserContextHolder.getContext().getCorrelationId());
+        return licenseService.getLicensesByOrganization(organizationId);
     }
 }

@@ -35,7 +35,7 @@ unpack organizationservice organization-service ${APP_VERSION}
 
 echo "Building Docker images"
 
-build configserver ostock/configserver ${VERSION}
-build eurekaserver ostock/eurekaserver ${VERSION}
-build licensing-service ostock/licensing-service ${VERSION}
-build organizationservice ostock/organization-service ${VERSION}
+build configserver ostock/configserver ${APP_VERSION}
+build eurekaserver ostock/eurekaserver ${APP_VERSION}
+build licensing-service ostock/licensing-service ${APP_VERSION}
+build organizationservice ostock/organization-service ${APP_VERSION}
