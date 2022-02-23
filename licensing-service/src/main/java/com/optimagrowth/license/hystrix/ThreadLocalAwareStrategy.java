@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ThreadLocalAwareStrategy extends HystrixConcurrencyStrategy {
 
-    private HystrixConcurrencyStrategy existingConcurrencyStrategy;
+    private final HystrixConcurrencyStrategy existingConcurrencyStrategy;
 
     public ThreadLocalAwareStrategy(HystrixConcurrencyStrategy existingConcurrencyStrategy) {
         this.existingConcurrencyStrategy = existingConcurrencyStrategy;

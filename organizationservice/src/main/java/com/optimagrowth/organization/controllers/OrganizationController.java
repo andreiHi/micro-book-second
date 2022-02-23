@@ -2,14 +2,16 @@ package com.optimagrowth.organization.controllers;
 
 import com.optimagrowth.organization.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.optimagrowth.organization.models.Organization;
 
+@Slf4j
 @RestController
-@RequestMapping(value="v1/organization")
+@RequestMapping(value="/v1/organization")
 @RequiredArgsConstructor
 public class OrganizationController {
 
@@ -17,6 +19,7 @@ public class OrganizationController {
 
     @GetMapping(value="/{organizationId}")
     public ResponseEntity<Organization> getOrganization(@PathVariable("organizationId") String organizationId) {
+        log.info("getOrganization");
         return ResponseEntity.ok(service.findById(organizationId));
     }
 
