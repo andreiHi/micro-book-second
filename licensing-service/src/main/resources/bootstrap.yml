@@ -6,3 +6,7 @@ spring:
   cloud:
     config:
         uri: http://localhost:8071
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://localhost:8082/user
