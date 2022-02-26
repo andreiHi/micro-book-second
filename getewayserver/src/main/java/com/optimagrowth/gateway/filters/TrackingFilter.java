@@ -2,6 +2,8 @@ package com.optimagrowth.gateway.filters;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
+import org.json.JSONObject;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.annotation.Order;
@@ -9,6 +11,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.util.Objects;
 
 /**
  * TrackingFilter будет предварительным фильтром, который гарантирует, что каждый запрос, поступающий от шлюза,
@@ -35,7 +39,7 @@ public class TrackingFilter implements GlobalFilter {
             exchange = filterUtils.setCorrelationId(exchange, correlationID);
             log.debug("tmx-correlation-id generated in tracking filter: {}.", correlationID);
         }
-
+        log.info("The authentication name from the token is : {}", getAuthenticationName(requestHeaders));
         return chain.filter(exchange);
     }
 
@@ -46,5 +50,26 @@ public class TrackingFilter implements GlobalFilter {
 
     private String generateCorrelationId() {
         return java.util.UUID.randomUUID().toString();
+    }
+
+    private String getAuthenticationName(HttpHeaders requestHeaders){
+        String authenticationName = "";
+        if (Objects.nonNull(filterUtils.getAuthToken(requestHeaders))){
+            String authToken =
+                    filterUtils.getAuthToken(requestHeaders).replace("Bearer ","");
+
+            JSONObject jsonObj = decodeJWT(authToken);
+            authenticationName = jsonObj.getString("authentication_name");
+        }
+        return authenticationName;
+    }
+
+    private JSONObject decodeJWT(String jwtToken) {
+        String[] splitString = jwtToken.split("\\.");
+        String base64EncodedBody = splitString[1];
+
+        Base64 base64Url = new Base64(true);
+        String body = new String(base64Url.decode(base64EncodedBody));
+        return new JSONObject(body);
     }
 }

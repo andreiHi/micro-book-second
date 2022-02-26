@@ -55,12 +55,12 @@ public class Config {
         return restTemplate;
     }
 
-    @Bean
-    @Primary
-    @LoadBalanced
-    public OAuth2RestTemplate oauth2RestTemplate(OAuth2ClientContext oauth2ClientContext,
-                                                 OAuth2ProtectedResourceDetails details) {
-        return new OAuth2RestTemplate(details, oauth2ClientContext);
-    }
+//    @Bean
+//    @Primary
+//    @LoadBalanced
+//    public OAuth2RestTemplate oauth2RestTemplate(OAuth2ClientContext oauth2ClientContext,
+//                                                 OAuth2ProtectedResourceDetails details) {
+//        return new OAuth2RestTemplate(details, oauth2ClientContext);
+//    }
 
 }
