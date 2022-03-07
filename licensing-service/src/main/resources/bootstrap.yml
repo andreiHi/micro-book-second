@@ -6,7 +6,15 @@ spring:
   cloud:
     config:
         uri: http://localhost:8071
-security:
-  oauth2:
-    resource:
-      user-info-uri: http://localhost:8082/user
+
+spring.cloud.stream.bindings:
+  order-out.destination: scs-099.order
+  order-in.destination: scs-099.order # Topic Name
+
+logging.level.com.ehsaniara.scs_kafka_intro: debug
+
+logging:
+  level:
+    com.netflix: WARN
+    org.springframework.web: WARN
+    com.optimagrowth: DEBUG
