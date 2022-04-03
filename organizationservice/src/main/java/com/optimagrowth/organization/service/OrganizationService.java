@@ -1,11 +1,13 @@
 package com.optimagrowth.organization.service;
 
+import brave.Tracer;
 import com.optimagrowth.organization.events.source.SimpleSourceBean;
 import com.optimagrowth.organization.models.Organization;
 import com.optimagrowth.organization.repository.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.UUID;
 
 @Service
@@ -13,6 +15,7 @@ import java.util.UUID;
 public class OrganizationService {
     private final OrganizationRepository repository;
     private final SimpleSourceBean simpleSourceBean;
+    private final Tracer tracer;
 
     public Organization findById(String organizationId) {
         simpleSourceBean.publishOrganizationChange("GET", organizationId);
@@ -32,8 +35,9 @@ public class OrganizationService {
         simpleSourceBean.publishOrganizationChange("UPDATE", organization.getId());
     }
 
-    public void delete(Organization organization) {
-        repository.deleteById(organization.getId());
+    public void delete(String id) {
+        Organization organization = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Not found with id" + id));
+        repository.delete(organization);
         simpleSourceBean.publishOrganizationChange("DELETE", organization.getId());
     }
 }

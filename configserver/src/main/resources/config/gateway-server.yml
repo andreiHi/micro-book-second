@@ -12,6 +12,11 @@ eureka:
 
 
 spring:
+  zipkin:
+    baseUrl: http://zipkin:9411
+  sleuth:
+    sampler:
+      percentage: 1
   cloud:
     loadbalancer.ribbon.enabled: false
     gateway:
@@ -36,3 +41,5 @@ management:
 logging:
   level:
     org.springframework.cloud.gateway.handler.predicate: info
+
+zipkin.baseUrl: zipkin:9411

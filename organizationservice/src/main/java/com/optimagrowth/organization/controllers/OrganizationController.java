@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.optimagrowth.organization.models.Organization;
 
+import java.util.concurrent.CompletableFuture;
+
 @Slf4j
 @RestController
 @RequestMapping(value="/v1/organization")
@@ -34,9 +36,9 @@ public class OrganizationController {
     }
 
     @DeleteMapping(value="/{organizationId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOrganization( @PathVariable("organizationId") String id,  @RequestBody Organization organization) {
-        service.delete(organization);
+    public CompletableFuture<ResponseEntity<Void>> deleteOrganization(@PathVariable("organizationId") String id) {
+        return  CompletableFuture.runAsync(() -> service.delete(id))
+                .thenApply(aVoid -> ResponseEntity.noContent().build());
     }
 
 }

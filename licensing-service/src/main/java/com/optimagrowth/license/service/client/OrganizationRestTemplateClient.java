@@ -1,5 +1,6 @@
 package com.optimagrowth.license.service.client;
 
+import brave.Tracer;
 import com.optimagrowth.license.model.Organization;
 import com.optimagrowth.license.repository.OrganizationRedisRepository;
 import com.optimagrowth.license.utils.UserContext;
@@ -22,6 +23,7 @@ public class OrganizationRestTemplateClient implements ClientHandler {
     private final RestTemplate restTemplate;
     //private final OAuth2RestTemplate oAuth2RestTemplate;
     private final OrganizationRedisRepository redisRepository;
+    private final Tracer tracer;
 
     @Override
     public Organization getOrganization(String organizationId) {
